@@ -41,7 +41,6 @@ def main():
     welcome()
     chances = set_difficulty()
     answer = randint(MINIMUM, MAXIMUM)
-    print(answer)
     while chances > 0:
         guess = int(input(f'Enter your guess ({chances} attemptes lef): '))
         if answer == guess:
