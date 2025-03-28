@@ -19,7 +19,7 @@ def welcome():
     flush_print(' the only...')
     sleep(1)
     flush_print(' ...')
-    sleep(2)
+    sleep(1.5)
     print('\n')
     print('NUMBER GUESSING GAME ! ! !'.center(60))
     sleep(0.5)
@@ -34,10 +34,10 @@ def set_difficulty():
                          2: NORMAL,
                          3: HARD}
     print('Please, set difficulty.', end='\n\n')
-    sleep(2)
+    sleep(1.5)
     print(f'1. Easy ({EASY} chances)\n'
     f'2. Normal ({NORMAL} chances)\n'
-    f'3. Hard ({HARD} chances)\n')
+    f'3. Hard ({HARD} chances)\n') # make them pop one by one
     picked_level = input('Enter the corresponding number [1/2/3]: ')
     while not picked_level.isnumeric() or not 0 < int(picked_level) < 4:
         picked_level = input('PLease, enter "1", "2" or "3": ')
@@ -65,12 +65,9 @@ def lose_announcement(answer):
     sleep(1)
     print('You lost!')
     sleep(0.5)
-    print('The number was {answer}.')
+    print(f'The number was {answer}.')
 
-def main():
-    welcome()
-    sleep(1)
-    chances = set_difficulty()
+def play_round(chances):
     answer = randint(MINIMUM, MAXIMUM)
     print()
     print(f'I\'m thinking of a number between {MINIMUM} and {MAXIMUM}.')
@@ -83,14 +80,37 @@ def main():
         sleep(0.15)
         if answer == guess:
             congratulate()
+            victory = True
             break
         chances -= 1
         print()
-        give_hint(answer, guess)
+        give_hint(answer, guess) # no need for hint, when you are out of chances
     else:
         print()
         lose_announcement(answer)
+        victory = False
     print()
+    return victory
 
+def main():
+    welcome()
+    sleep(1)
+    chances = set_difficulty()
+    while True:
+        victory = play_round(chances)
+        victory_message = 'You are amazing! It was SO fun. Play again?'
+        lose_message = 'Cheer up! You almost did it. Try again?'
+        message = victory_message if victory else lose_message
+        answer = input(message + ' [y/n] : ')
+        while answer != 'y' and answer != 'n':
+            answer = input('I don\'t understand you. PLease enter just "y" or "n" : ')
+        if answer == 'n':
+            print()
+            print('Well, it was fun!',  flush=True, end=' ')
+            sleep(0.5)
+            print('Bye!',  flush=True, end=' ')
+            sleep(0.5)
+            print('\n')
+            break
 if __name__ == '__main__':
     main()
