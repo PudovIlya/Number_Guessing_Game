@@ -7,8 +7,8 @@ For now it's CLI game, in which you can:
 - [x] select difficulty (number of chances);
 - [x] enter your guess;
 - [x] playing non stop;
-- [ ] use hints;
-- [ ] see time it took you to guess;
+- [x] use hints;
+- [x] see time it took you to guess;
 - [ ] gather statistics;
 - [x] enjoy (only if you're not picky at games).
 
