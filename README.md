@@ -7,8 +7,10 @@ For now it's CLI game, in which you can:
 - [x] select difficulty (number of chances);
 - [x] enter your guess;
 - [x] playing non stop;
-- [x] use hints;
+- [x] contemplate ingeniously designed text messages;
+- [x] decide whether to use extended hints ot not (whether the number is devisible by random number);
 - [x] see time it took you to guess;
-- [ ] gather statistics;
-- [x] enjoy (only if you're not picky at games).
+- [x] gather statistics (spared tries and time at this difficulty level);
+- [x] enjoy *(if you're not picky at games only).
 
+But I'm afraid, you should have python interpreter on you PC to play this game (yeah, it's just a python script).
