@@ -1,6 +1,6 @@
 # Number Guessing Game
 
-It's just another Number Guessing Game. Just practicing.
+It's just another *Number Guessing Game*. Just practicing.
 
 For now it's CLI game, in which you can:
 
