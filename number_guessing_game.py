@@ -8,8 +8,7 @@ MAXIMUM = 100
 # chances
 DIFFICULTIES = {'Easy': 10,
                 'Normal': 7,
-                'Hard': 3,
-                'Extra': 0}
+                'Hard': 3}
 
 
 def validate_yes_or_no(user_answer: object) -> str:
@@ -125,8 +124,52 @@ def play_round(difficulty: str, hints_state: bool = False) -> tuple[bool, int, i
     print()
     return victory, chances - 1, elapsed_time
 
-def update_statistics(difficulty_level, hints_state, chances_left, time_elapsed):
-    pass # is to be implemented
+def update_statistics(new_difficulty:str, new_hints:bool,
+                      new_chances:int, new_time:int) -> bool:
+    '''Write results in file_name file if they are better then written.
+    Better results = more chances left or chances are same but new time is less. 
+    Creates new file if it doesn't exist (in the program directory). 
+    Compare results with the same difficulty level and hints state. 
+    Returns wheather the results were updated.
+    Results is written in the form: "difficulty hints chances time\\n" '''
+
+    file_name = '_statistics(NGG).txt'
+
+    def new_results_better(old_chances, old_time, new_cahnces, new_time):
+        return old_chances < new_cahnces or (old_chances == new_chances and
+                                             old_time > new_time)
+    
+    new_hints = int(new_hints) # easier to store bool in txt as int
+
+    results_updated = False
+    try:
+        with open(file_name, 'r') as file_object:
+            records = [line.strip().split() for line in file_object]
+    except FileNotFoundError: 
+        with open(file_name, 'w') as file_object:
+            file_object.write(' '.join( (str(new_difficulty),
+                                         str(new_hints),
+                                         str(new_chances),
+                                         str(new_time)) ) + '\n')
+        results_updated = True
+    else:
+        for idx, (difficulty, hints, chances, time) in enumerate(records):
+            if (difficulty, int(hints)) == (new_difficulty, new_hints):
+                if new_results_better(int(chances), int(time),
+                                       new_chances, new_time):
+                    records[idx] = [difficulty, hints, str(new_chances), str(new_time)]
+                    results_updated = True
+                break
+        else:
+            records.append([new_difficulty, str(new_hints),
+                            str(new_chances), str(new_time)])
+            results_updated = True
+        
+        if results_updated:
+            with open(file_name, 'w') as file_object:
+                for record in records:
+                    file_object.write(' '.join(record) + '\n')
+    return results_updated
 
 def main():
     welcome()
@@ -135,12 +178,19 @@ def main():
     while True:
         victory, chances_left, time_elapsed = play_round(difficulty, hints_state)
         if victory:
-            update_statistics(difficulty, hints_state, chances_left, time_elapsed)
+            statistics_updated = update_statistics(difficulty, hints_state,
+                                                   chances_left, time_elapsed)
+            if statistics_updated:
+                print('Wow! It\'s your new best:\n'
+                    f'Difficulty:{difficulty:.>30}\n'
+                    f'Hints used:{'Yes' if hints_state else 'No':.>30}\n'
+                    f'Chances left:{chances_left:.>30}\n'
+                    f'Time:{time_elapsed:.>30}\n')
         victory_message = 'You are amazing! It was SO fun. Play again?'
         lose_message = 'Cheer up! You almost did it. Try again?'
         message = victory_message if victory else lose_message
         answer = input(message + ' [y/n] : ')
-        answer = validate_yes_or_no()
+        answer = validate_yes_or_no(answer)
         if answer == 'n':
             print()
             print('Well, it was fun!',  flush=True, end=' ')
@@ -150,5 +200,4 @@ def main():
             print('\n')
             break
 if __name__ == '__main__':
-    # main()
-    print(play_round('Easy', False))
+    main()
