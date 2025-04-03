@@ -1,6 +1,8 @@
 # Number Guessing Game
 
-It's just another *Number Guessing Game*. Just practicing.
+It's just another *Number Guessing Game*. Just practicing. 
+
+(The project idea is from https://roadmap.sh/projects/number-guessing-game).
 
 For now it's CLI game, in which you can:
 
